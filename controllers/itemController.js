@@ -27,8 +27,6 @@ exports.index = asyncHandler(async (req, res, next) => {
     });
   });
 
-  console.log(categoryCounts);
-
   res.render('index', {
     title: 'Little Family Inventory Management Home',
     item_count_total: itemDocs.length,
@@ -55,7 +53,12 @@ exports.item_detail = asyncHandler(async (req, res, next) => {
 
 // Display Item create form on GET.
 exports.item_create_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Item Create GET');
+  const allCategories = await Category.find().sort({ name: 1 }).exec();
+
+  res.render('item_form', {
+    title: 'Create New Item',
+    categories: allCategories,
+  });
 });
 
 //Handle Item create on POST.

@@ -73,3 +73,50 @@ a:active {
   flex-direction: column;
   gap: 1vh;
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  align-items: flex-start;
+  font-size: 1.1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+}
+
+input[type='text'],
+input[type='number'] {
+  padding: 8px;
+}
+
+input[type='text'] {
+  width: 50vw;
+}
+
+.checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2vw;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+}
+
+button {
+  padding: 8px;
+}
+
+.btn-submit {
+  margin-top: 50px;
+  margin-left: 15vw;
+  width: 200px;
+  height: 50px;
+  font-size: 1.1rem;
+}
