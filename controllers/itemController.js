@@ -4,7 +4,7 @@ const { body, validationResult } = require('express-validator');
 const Item = require('../models/item');
 const Category = require('../models/category');
 
-// Display site home page
+// Display site home page.
 exports.index = asyncHandler(async (req, res, next) => {
   const [allItems, allCategories] = await Promise.all([
     Item.find().populate('category').exec(),
@@ -39,14 +39,19 @@ exports.index = asyncHandler(async (req, res, next) => {
 exports.item_list = asyncHandler(async (req, res, next) => {
   const allItems = await Item.find().sort({ name: 1 }).exec();
 
-  res.render('item_list', { title: 'List of all Items', all_items: allItems });
+  res.render('item_list', {
+    title: 'List of all Items',
+    all_items: allItems,
+  });
 });
 
 // Display detail page for a specific Item.
 exports.item_detail = asyncHandler(async (req, res, next) => {
   const item = await Item.findById(req.params.id).populate('category').exec();
 
-  res.render('item_detail', { item });
+  res.render('item_detail', {
+    item,
+  });
 });
 
 // Display Item create form on GET.
@@ -133,7 +138,10 @@ exports.item_delete_get = asyncHandler(async (req, res, next) => {
 
   if (item === null) res.redirect('/inventory/items');
 
-  res.render('item_delete', { title: 'Delete Item', item });
+  res.render('item_delete', {
+    title: 'Delete Item',
+    item,
+  });
 });
 
 // Handle Item delete on POST.
@@ -229,8 +237,8 @@ exports.item_update_post = [
         errors: errors.array(),
       });
     } else {
-      const updatedItem = await Item.findByIdAndUpdate(req.params.id, item, {});
-      res.redirect(updatedItem.url);
+      await Item.findByIdAndUpdate(req.params.id, item, {});
+      res.redirect(item.url);
     }
   }),
 ];
