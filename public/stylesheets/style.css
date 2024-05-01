@@ -26,7 +26,7 @@ body {
 
 .sidebar-nav {
   font-size: 1.1rem;
-  width: max-content;
+  width: 190px;
   padding: 3vh 16px;
 }
 
@@ -55,6 +55,7 @@ a:active {
   flex-direction: column;
   gap: 3vh;
   padding: 32px;
+  width: calc(100vw - 195px);
 }
 
 .home-categories {
