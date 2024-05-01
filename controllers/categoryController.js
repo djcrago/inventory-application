@@ -16,7 +16,25 @@ exports.category_list = asyncHandler(async (req, res, next) => {
 
 // Display detail page for a specific Category.
 exports.category_detail = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Category Detail');
+  const [category, allItemDocs] = await Promise.all([
+    Category.find({ name: req.params.name }).exec(),
+    Item.find().populate('category').sort({ name: 1 }).exec(),
+  ]);
+
+  const categoryItems = [];
+
+  allItemDocs.forEach((item) => {
+    item.category.forEach((cat) => {
+      if (cat.name === category[0].name) {
+        categoryItems.push(item);
+      }
+    });
+  });
+
+  res.render('category_detail', {
+    category: category[0],
+    category_items: categoryItems,
+  });
 });
 
 // Display Category create form on GET.
