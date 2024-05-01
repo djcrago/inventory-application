@@ -7,7 +7,8 @@ block content
     div.form-group
       label(for="name") #[strong Name: ]
       input#name(type="text" name='name' required placeholder='Name of category' value=(undefined===category ? '' : category.name))
-      input(type="hidden" name='categoryid' value=category._id)
+      if category
+        input(type="hidden" name='categoryid' value=category._id)
     button.btn-submit(type='submit') Submit
   
   if errors
