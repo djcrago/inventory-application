@@ -15,7 +15,7 @@ block content
       div.m-l-16.checkboxes
         each category in categories 
           div.checkbox
-            if category.check 
+            if category.checked
               input(type="checkbox" name='category' id=category._id value=category._id checked)
             else 
               input(type="checkbox" name='category' id=category._id value=category._id)
@@ -25,6 +25,11 @@ block content
       input#price(type="number" name='price' required value=(undefined===item ? 0 : item.price))
     div.form-group
       label(for="numberInStock") #[strong Number in Stock: ]
-      input#numberInStock(type="number" required value=(undefined===item ? 0: item.number_in_stock))
+      input#numberInStock(type="number" name='number_in_stock' required value=(undefined===item ? 0: item.number_in_stock))
 
     button.btn-submit(type='submit') Submit
+  
+  if errors 
+    ul 
+      for error in errors 
+        li!= error.msg

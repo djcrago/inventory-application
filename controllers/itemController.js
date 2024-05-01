@@ -62,9 +62,77 @@ exports.item_create_get = asyncHandler(async (req, res, next) => {
 });
 
 //Handle Item create on POST.
-exports.item_create_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Item Create POST');
-});
+exports.item_create_post = [
+  // Convert category to an array.
+  (req, res, next) => {
+    if (!Array.isArray(req.body.category)) {
+      req.body.category =
+        typeof req.body.genre === undefined ? [] : [req.body.category];
+    }
+    next();
+  },
+
+  // Validate and sanitize fields
+  body('name', 'Name must not be empty')
+    .trim()
+    .isLength({ min: 3, max: 100 })
+    .escape(),
+  body('description', 'Description must not be empty')
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+  body('category', 'Must choose at least one category')
+    .custom((value) => {
+      if (value[0] === undefined) return false;
+      return true;
+    })
+    .escape(),
+  body('price', 'Price must be at least $0.01')
+    .custom((value) => {
+      if (+value < 0.01) {
+        return false;
+      }
+      return true;
+    })
+    .escape(),
+  body('number_in_stock').notEmpty().escape(),
+
+  // Process request adter validation/sanitization
+  asyncHandler(async (req, res, next) => {
+    // Extract validation errors from a request
+    const errors = validationResult(req);
+
+    const item = new Item({
+      name: req.body.name,
+      description: req.body.description,
+      category: req.body.category,
+      price: req.body.price,
+      number_in_stock: req.body.number_in_stock,
+    });
+
+    if (!errors.isEmpty()) {
+      // Render form again with sanitized values/error messages
+      const allCategories = await Category.find().sort({ name: 1 }).exec();
+
+      // Mark selected categories as checked.
+      for (const category of allCategories) {
+        if (item.category.includes(category._id)) {
+          category.checked = 'true';
+        }
+      }
+
+      res.render('item_form', {
+        title: 'Create New Item',
+        item,
+        categories: allCategories,
+        errors: errors.array(),
+      });
+    } else {
+      await item.save();
+      res.redirect(item.url);
+    }
+  }),
+];
 
 // Display Item delete form on GET.
 exports.item_delete_get = asyncHandler(async (req, res, next) => {
