@@ -57,6 +57,10 @@ a:active {
   color: purple;
 }
 
+a:hover {
+  text-decoration: underline;
+}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -89,12 +93,22 @@ form {
 }
 
 input[type='text'],
-input[type='number'] {
+input[type='number'],
+#description {
   padding: 8px;
 }
 
-input[type='text'] {
+input[type='text'],
+#description {
   width: 50vw;
+}
+
+#description {
+  height: 15vh;
+}
+
+.description {
+  white-space: pre-wrap;
 }
 
 .checkboxes {
@@ -128,4 +142,8 @@ button {
   height: 50px;
   background-color: rgba(176, 212, 176, 0.5);
   border-top: 1px solid lightgray;
+}
+
+.errors {
+  color: red;
 }

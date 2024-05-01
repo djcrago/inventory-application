@@ -1,47 +1,45 @@
+const asyncHandler = require('express-async-handler');
+const { body, validationResult } = require('express-validator');
+
 const Item = require('../models/item');
 const Category = require('../models/category');
 
-const { body, validationResult } = require('express-validator');
-const asyncHandler = require('express-async-handler');
-
+// Display site home page
 exports.index = asyncHandler(async (req, res, next) => {
-  const [itemDocs, categoryDocs] = await Promise.all([
+  const [allItems, allCategories] = await Promise.all([
     Item.find().populate('category').exec(),
     Category.find().sort({ name: 1 }).exec(),
   ]);
 
-  const categoryCounts = [];
+  const categoriesWithItemCounts = [];
 
-  categoryDocs.forEach((categoryDoc) => {
-    let count = 0;
+  allCategories.forEach((category) => {
+    let itemCount = 0;
 
-    itemDocs.forEach((item) => {
-      item.category.forEach((category) => {
-        if (category.name === categoryDoc.name) count += 1;
+    allItems.forEach((item) => {
+      item.category.forEach((cat) => {
+        if (cat.name === category.name) itemCount += 1;
       });
     });
 
-    categoryCounts.push({
-      name: categoryDoc.name,
-      count,
+    categoriesWithItemCounts.push({
+      name: category.name,
+      item_count: itemCount,
     });
   });
 
   res.render('index', {
     title: 'Little Family Inventory Management Home',
-    item_count_total: itemDocs.length,
-    category_count_total: categoryDocs.length,
-    category_counts: categoryCounts,
+    all_items: allItems.length,
+    all_categories: categoriesWithItemCounts,
   });
 });
 
-// Display list of all Item.
+// Display list of all Items.
 exports.item_list = asyncHandler(async (req, res, next) => {
-  const allItems = await Item.find({}, 'name price number_in_stock')
-    .sort({ name: 1 })
-    .exec();
+  const allItems = await Item.find().sort({ name: 1 }).exec();
 
-  res.render('item_list', { title: 'List of all Items', item_list: allItems });
+  res.render('item_list', { title: 'List of all Items', all_items: allItems });
 });
 
 // Display detail page for a specific Item.
@@ -57,7 +55,7 @@ exports.item_create_get = asyncHandler(async (req, res, next) => {
 
   res.render('item_form', {
     title: 'Create New Item',
-    categories: allCategories,
+    all_categories: allCategories,
   });
 });
 
@@ -67,31 +65,29 @@ exports.item_create_post = [
   (req, res, next) => {
     if (!Array.isArray(req.body.category)) {
       req.body.category =
-        typeof req.body.genre === undefined ? [] : [req.body.category];
+        req.body.category === undefined ? [] : [req.body.category];
     }
     next();
   },
 
   // Validate and sanitize fields
-  body('name', 'Item name must contain at least 3 characters')
+  body('name', 'Name must not be empty')
     .trim()
-    .isLength({ min: 3, max: 100 })
+    .isLength({ min: 1, max: 100 })
     .escape(),
-  body('description', 'Item description must contain at least 3 characters')
+  body('description', 'Description must not be empty')
     .trim()
-    .isLength({ min: 3 })
+    .isLength({ min: 1 })
     .escape(),
   body('category', 'Must choose at least one category')
     .custom((value) => {
-      if (value[0] === undefined) return false;
+      if (value.length === 0) return false;
       return true;
     })
     .escape(),
-  body('price', 'Price must be at least $0.01')
+  body('price', 'Price cannot be 0')
     .custom((value) => {
-      if (+value < 0.01) {
-        return false;
-      }
+      if (value === '0') return false;
       return true;
     })
     .escape(),
@@ -114,17 +110,14 @@ exports.item_create_post = [
       // Render form again with sanitized values/error messages
       const allCategories = await Category.find().sort({ name: 1 }).exec();
 
-      // Mark selected categories as checked.
-      for (const category of allCategories) {
-        if (item.category.includes(category._id)) {
-          category.checked = 'true';
-        }
-      }
+      allCategories.forEach((category) => {
+        if (item.category.includes(category._id)) category.checked = 'true';
+      });
 
       res.render('item_form', {
         title: 'Create New Item',
         item,
-        categories: allCategories,
+        all_categories: allCategories,
         errors: errors.array(),
       });
     } else {
@@ -138,9 +131,7 @@ exports.item_create_post = [
 exports.item_delete_get = asyncHandler(async (req, res, next) => {
   const item = await Item.findById(req.params.id).exec();
 
-  if (item === null) {
-    res.redirect('/inventory/items');
-  }
+  if (item === null) res.redirect('/inventory/items');
 
   res.render('item_delete', { title: 'Delete Item', item });
 });
@@ -159,7 +150,6 @@ exports.item_update_get = asyncHandler(async (req, res, next) => {
   ]);
 
   if (item === null) {
-    // No results
     const err = new Error('Item not found');
     err.status = 404;
     return next(err);
@@ -172,7 +162,7 @@ exports.item_update_get = asyncHandler(async (req, res, next) => {
   res.render('item_form', {
     title: 'Update Item',
     item,
-    categories: allCategories,
+    all_categories: allCategories,
   });
 });
 
@@ -182,31 +172,29 @@ exports.item_update_post = [
   (req, res, next) => {
     if (!Array.isArray(req.body.category)) {
       req.body.category =
-        typeof req.body.genre === undefined ? [] : [req.body.category];
+        req.body.category === undefined ? [] : [req.body.category];
     }
     next();
   },
 
   // Validate and sanitize fields
-  body('name', 'Item name must contain at least 3 characters')
+  body('name', 'Name must not be empty')
     .trim()
-    .isLength({ min: 3, max: 100 })
+    .isLength({ min: 1, max: 100 })
     .escape(),
-  body('description', 'Item description must contain at least 3 characters')
+  body('description', 'Description must not be empty')
     .trim()
-    .isLength({ min: 3 })
+    .isLength({ min: 1 })
     .escape(),
   body('category', 'Must choose at least one category')
     .custom((value) => {
-      if (value[0] === undefined) return false;
+      if (value.length === 0) return false;
       return true;
     })
     .escape(),
-  body('price', 'Price must be at least $0.01')
+  body('price', 'Price cannot be 0')
     .custom((value) => {
-      if (+value < 0.01) {
-        return false;
-      }
+      if (value === '0') return false;
       return true;
     })
     .escape(),
@@ -230,17 +218,14 @@ exports.item_update_post = [
       // Render form again with sanitized values/error messages
       const allCategories = await Category.find().sort({ name: 1 }).exec();
 
-      // Mark selected categories as checked.
-      for (const category of allCategories) {
-        if (item.category.includes(category._id)) {
-          category.checked = 'true';
-        }
-      }
+      allCategories.forEach((category) => {
+        if (item.category.includes(category._id)) category.checked = 'true';
+      });
 
       res.render('item_form', {
         title: 'Update Item',
         item,
-        categories: allCategories,
+        all_categories: allCategories,
         errors: errors.array(),
       });
     } else {

@@ -3,12 +3,11 @@ extends layout
 block content 
   h2= item.name 
 
-
-  p #[strong Description:] #{item.description}
+  div.description #[strong Description:] #{item.description}
   p #[strong Price:] $#{item.price}
   p #[strong Number in Stock:] #{item.number_in_stock}
   p #[strong Categories:] 
-    each category, index in item.category 
+    for category, index in item.category 
       a(href=category.url) #{category.name}
       if index < item.category.length - 1
         |,&nbsp;

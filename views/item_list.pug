@@ -4,7 +4,7 @@ block content
   h2= title
 
   ul 
-    each item in item_list 
+    for item in all_items
       li 
         div.item-list-item
           a(href=item.url) #{item.name}
