@@ -103,10 +103,59 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
 
 // Display Category update form on GET.
 exports.category_update_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Category Update GET');
+  const category = await Category.find({ name: req.params.name });
+
+  if (category === null) {
+    // No results
+    const err = new Error('Category not found');
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render('category_form', {
+    title: 'Update Category',
+    category: category[0],
+  });
 });
 
 // Handle Category update on POST.
-exports.category_update_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Category Update POST');
-});
+exports.category_update_post = [
+  // Validate and sanitize fields
+  body('name', 'Category name must contain at least 3 characters')
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+
+  // Process request after validation/sanitization
+  asyncHandler(async (req, res, next) => {
+    const oldCategory = await Category.find({ name: req.params.name }).exec();
+
+    // Extract validation errors from request
+    const errors = validationResult(req);
+
+    const category = new Category({
+      name: req.body.name,
+      id: oldCategory[0]._id,
+    });
+
+    if (!errors.isEmpty()) {
+      // Render form again with sanitized values/error messages
+      res.render('category_form', {
+        title: 'Update Category',
+        category,
+        errors: errors.array(),
+      });
+    } else {
+      const categoryExists = await Category.findOne({ name: req.body.name })
+        .collation({ locale: 'en', strength: 2 })
+        .exec();
+
+      if (categoryExists) {
+        res.redirect(categoryExists.url);
+      } else {
+        await category.save();
+        res.redirect(category.url);
+      }
+    }
+  }),
+];
