@@ -22,7 +22,7 @@ block content
             label(for=category._id) &nbsp;#{category.name} 
     div.form-group
       label(for="price") #[strong Price: ]
-      input#price(type="number" name='price' min=0 required value=(undefined===item ? 0 : item.price))
+      input#price(type="number" name='price' min=0 step='.01' required value=(undefined===item ? 0 : item.price))
     div.form-group
       label(for="numberInStock") #[strong Number in Stock: ]
       input#numberInStock(type="number" min=0 name='number_in_stock' required value=(undefined===item ? 0: item.number_in_stock))
