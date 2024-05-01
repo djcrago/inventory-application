@@ -37,6 +37,23 @@ body {
   border-right: 1px solid lightgray;
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 3vh;
+  padding: 4vw 5vw;
+  width: calc(100vw - 300px);
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  background-color: rgba(176, 212, 176, 0.5);
+  border-top: 1px solid lightgray;
+}
+
 ul {
   display: flex;
   flex-direction: column;
@@ -59,24 +76,6 @@ a:active {
 
 a:hover {
   text-decoration: underline;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: 3vh;
-  padding: 4vw 5vw;
-  width: calc(100vw - 300px);
-}
-
-.m-l-16 {
-  margin-left: 16px;
-}
-
-.item-list-item {
-  display: flex;
-  flex-direction: column;
-  gap: 1vh;
 }
 
 form {
@@ -135,15 +134,16 @@ button {
   font-size: 1.1rem;
 }
 
-.footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  background-color: rgba(176, 212, 176, 0.5);
-  border-top: 1px solid lightgray;
-}
-
 .errors {
   color: red;
+}
+
+.m-l-16 {
+  margin-left: 16px;
+}
+
+.item-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
 }
