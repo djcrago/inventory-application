@@ -4,6 +4,6 @@ block content
   h2= title
 
   ul 
-    each category in category_list 
+    for category in all_categories
       li 
         a.m-l-16(href=category.url) #{category.name}

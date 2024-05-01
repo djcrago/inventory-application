@@ -3,12 +3,12 @@ extends layout
 block content 
   h2 #{category.name}
 
-  p Total Number of Items in Category: #{category_items.length}
+  p #[strong Number of Items in Category:] #{items_in_category.length}
 
   ul
-    for item  in category_items
+    for item  in items_in_category
       li.m-l-16
-        a(href=item .url) #{item.name} 
+        a(href=item.url) #{item.name} 
         | (#{item.number_in_stock} in stock)
   hr 
   a(href=`${category.url}/update`) Update Category 

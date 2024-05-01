@@ -1,39 +1,27 @@
+const asyncHandler = require('express-async-handler');
+const { body, validationResult } = require('express-validator');
+
 const Category = require('../models/category');
 const Item = require('../models/item');
 
-const { body, validationResult } = require('express-validator');
-const asyncHandler = require('express-async-handler');
-
-// Display list of all Category.
+// Display list of all Categories.
 exports.category_list = asyncHandler(async (req, res, next) => {
   const allCategories = await Category.find().sort({ name: 1 }).exec();
 
   res.render('category_list', {
     title: 'List of all Categories',
-    category_list: allCategories,
+    all_categories: allCategories,
   });
 });
 
 // Display detail page for a specific Category.
 exports.category_detail = asyncHandler(async (req, res, next) => {
-  const [category, allItemDocs] = await Promise.all([
-    Category.find({ name: req.params.name }).exec(),
-    Item.find().populate('category').sort({ name: 1 }).exec(),
-  ]);
-
-  const categoryItems = [];
-
-  allItemDocs.forEach((item) => {
-    item.category.forEach((cat) => {
-      if (cat.name === category[0].name) {
-        categoryItems.push(item);
-      }
-    });
-  });
+  const category = await Category.findOne({ name: req.params.name }).exec();
+  const itemsInCategory = await Item.find({ category: category._id }).exec();
 
   res.render('category_detail', {
-    category: category[0],
-    category_items: categoryItems,
+    category,
+    items_in_category: itemsInCategory,
   });
 });
 
@@ -45,10 +33,7 @@ exports.category_create_get = asyncHandler(async (req, res, next) => {
 //Handle Category create on POST.
 exports.category_create_post = [
   // Validate and sanitize fields
-  body('name', 'Category name must contain at least 3 characters')
-    .trim()
-    .isLength({ min: 3 })
-    .escape(),
+  body('name', 'Name must not be empty').trim().isLength({ min: 1 }).escape(),
 
   // Process request after validation/sanitization
   asyncHandler(async (req, res, next) => {
@@ -81,17 +66,15 @@ exports.category_create_post = [
 
 // Display Category delete form on GET.
 exports.category_delete_get = asyncHandler(async (req, res, next) => {
-  const category = await Category.find({ name: req.params.name }).exec();
-  const allItemsInCategory = await Item.find({ category: category }).exec();
+  const category = await Category.findOne({ name: req.params.name }).exec();
+  const itemsInCategory = await Item.find({ category: category._id }).exec();
 
-  if (category === null) {
-    res.redirect('/inventory/categories');
-  }
+  if (category === null) res.redirect('/inventory/categories');
 
   res.render('category_delete', {
     title: 'Delete Category',
-    category: category[0],
-    items_in_category: allItemsInCategory,
+    category,
+    items_in_category: itemsInCategory,
   });
 });
 
@@ -103,10 +86,9 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
 
 // Display Category update form on GET.
 exports.category_update_get = asyncHandler(async (req, res, next) => {
-  const category = await Category.find({ name: req.params.name });
+  const category = await Category.findOne({ name: req.params.name }).exec();
 
   if (category === null) {
-    // No results
     const err = new Error('Category not found');
     err.status = 404;
     return next(err);
@@ -114,28 +96,23 @@ exports.category_update_get = asyncHandler(async (req, res, next) => {
 
   res.render('category_form', {
     title: 'Update Category',
-    category: category[0],
+    category,
   });
 });
 
 // Handle Category update on POST.
 exports.category_update_post = [
   // Validate and sanitize fields
-  body('name', 'Category name must contain at least 3 characters')
-    .trim()
-    .isLength({ min: 3 })
-    .escape(),
+  body('name', 'Name must not be empty').trim().isLength({ min: 1 }).escape(),
 
   // Process request after validation/sanitization
   asyncHandler(async (req, res, next) => {
-    const oldCategory = await Category.find({ name: req.params.name }).exec();
-
     // Extract validation errors from request
     const errors = validationResult(req);
 
     const category = new Category({
       name: req.body.name,
-      id: oldCategory[0]._id,
+      _id: req.body.categoryid,
     });
 
     if (!errors.isEmpty()) {
@@ -153,7 +130,7 @@ exports.category_update_post = [
       if (categoryExists) {
         res.redirect(categoryExists.url);
       } else {
-        await category.save();
+        await Category.findByIdAndUpdate(req.body.categoryid, category, {});
         res.redirect(category.url);
       }
     }
