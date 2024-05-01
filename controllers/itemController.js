@@ -73,11 +73,11 @@ exports.item_create_post = [
   },
 
   // Validate and sanitize fields
-  body('name', 'Name must not be empty')
+  body('name', 'Item name must contain at least 3 characters')
     .trim()
     .isLength({ min: 3, max: 100 })
     .escape(),
-  body('description', 'Description must not be empty')
+  body('description', 'Item description must contain at least 3 characters')
     .trim()
     .isLength({ min: 3 })
     .escape(),
@@ -99,7 +99,7 @@ exports.item_create_post = [
 
   // Process request after validation/sanitization
   asyncHandler(async (req, res, next) => {
-    // Extract validation errors from a request
+    // Extract validation errors from request
     const errors = validationResult(req);
 
     const item = new Item({
@@ -122,7 +122,7 @@ exports.item_create_post = [
       }
 
       res.render('item_form', {
-        title: 'Delete Item',
+        title: 'Create New Item',
         item,
         categories: allCategories,
         errors: errors.array(),
@@ -188,11 +188,11 @@ exports.item_update_post = [
   },
 
   // Validate and sanitize fields
-  body('name', 'Name must not be empty')
+  body('name', 'Item name must contain at least 3 characters')
     .trim()
     .isLength({ min: 3, max: 100 })
     .escape(),
-  body('description', 'Description must not be empty')
+  body('description', 'Item description must contain at least 3 characters')
     .trim()
     .isLength({ min: 3 })
     .escape(),
