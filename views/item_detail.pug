@@ -12,3 +12,6 @@ block content
       a(href=category.url) #{category.name}
       if index < item.category.length - 1
         |,&nbsp;
+  hr
+  a(href=`${item.url}/update`) Update Item 
+  a(href=`${item.url}/delete`) Delete Item 
