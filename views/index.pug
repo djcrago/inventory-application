@@ -11,7 +11,7 @@ block content
   h3 Categories
     
   ul
-    each category in all_categories
+    for category in all_categories
       li.m-l-16
         a(href=`/inventory/category/${category.name}`) #{category.name}
         |: #{category.item_count} items
