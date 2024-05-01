@@ -39,13 +39,45 @@ exports.category_detail = asyncHandler(async (req, res, next) => {
 
 // Display Category create form on GET.
 exports.category_create_get = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Category Create GET');
+  res.render('category_form', { title: 'Create New Category' });
 });
 
 //Handle Category create on POST.
-exports.category_create_post = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Category Create POST');
-});
+exports.category_create_post = [
+  // Validate and sanitize fields
+  body('name', 'Category name must contain at least 3 characters')
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+
+  // Process request after validation/sanitization
+  asyncHandler(async (req, res, next) => {
+    // Extract validation errors from request
+    const errors = validationResult(req);
+
+    const category = new Category({ name: req.body.name });
+
+    if (!errors.isEmpty()) {
+      // Render form again with sanitized values/error messages
+      res.render('category_form', {
+        title: 'Create New Category',
+        category,
+        errors: errors.array(),
+      });
+    } else {
+      const categoryExists = await Category.findOne({ name: req.body.name })
+        .collation({ locale: 'en', strength: 2 })
+        .exec();
+
+      if (categoryExists) {
+        res.redirect(categoryExists.url);
+      } else {
+        await category.save();
+        res.redirect(category.url);
+      }
+    }
+  }),
+];
 
 // Display Category delete form on GET.
 exports.category_delete_get = asyncHandler(async (req, res, next) => {
