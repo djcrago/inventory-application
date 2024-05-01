@@ -36,7 +36,7 @@ router.get('/items', item_controller.item_list);
 
 // CATEGORY ROUTES
 
-// GET request for creating a Category. NOTE: This must come before routes that display Item (uses id).
+// GET request for creating a Category. NOTE: This must come before routes that display Category (uses id).
 router.get('/category/create', category_controller.category_create_get);
 
 // POST request for creating a Category.
@@ -57,7 +57,7 @@ router.post('/category/:name/update', category_controller.category_update_post);
 // GET request for one Category.
 router.get('/category/:name', category_controller.category_detail);
 
-// GET request for all Category items.
+// GET request for all Categories.
 router.get('/categories', category_controller.category_list);
 
 module.exports = router;
