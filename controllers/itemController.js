@@ -56,7 +56,7 @@ exports.item_create_get = asyncHandler(async (req, res, next) => {
   const allCategories = await Category.find().sort({ name: 1 }).exec();
 
   res.render('item_form', {
-    title: 'Create New Item',
+    title: 'Delete Item',
     categories: allCategories,
   });
 });
@@ -122,7 +122,7 @@ exports.item_create_post = [
       }
 
       res.render('item_form', {
-        title: 'Create New Item',
+        title: 'Delete Item',
         item,
         categories: allCategories,
         errors: errors.array(),
@@ -170,7 +170,7 @@ exports.item_update_get = asyncHandler(async (req, res, next) => {
   });
 
   res.render('item_form', {
-    title: 'Create New Item',
+    title: 'Update Item',
     item,
     categories: allCategories,
   });
@@ -238,7 +238,7 @@ exports.item_update_post = [
       }
 
       res.render('item_form', {
-        title: 'Update New Item',
+        title: 'Update Item',
         item,
         categories: allCategories,
         errors: errors.array(),
