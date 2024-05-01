@@ -5,7 +5,36 @@ const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
 
 exports.index = asyncHandler(async (req, res, next) => {
-  res.send('NOT IMPLEMENTED: Home Page');
+  const [itemDocs, categoryDocs] = await Promise.all([
+    Item.find().populate('category').exec(),
+    Category.find().sort({ name: 1 }).exec(),
+  ]);
+
+  const categoryCounts = [];
+
+  categoryDocs.forEach((categoryDoc) => {
+    let count = 0;
+
+    itemDocs.forEach((item) => {
+      item.category.forEach((category) => {
+        if (category.name === categoryDoc.name) count += 1;
+      });
+    });
+
+    categoryCounts.push({
+      name: categoryDoc.name,
+      count,
+    });
+  });
+
+  console.log(categoryCounts);
+
+  res.render('index', {
+    title: 'Little Family Inventory Management Home',
+    item_count_total: itemDocs.length,
+    category_count_total: categoryDocs.length,
+    category_counts: categoryCounts,
+  });
 });
 
 // Display list of all Item.
