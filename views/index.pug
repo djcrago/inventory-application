@@ -10,8 +10,8 @@ block content
 
   h3 Categories
     
-  ul.home-categories
+  ul
     each category_count in category_counts
-      li
+      li.m-l-16
         a(href="/inventory/category/category_count.name") #{category_count.name}
         |: #{category_count.count} items

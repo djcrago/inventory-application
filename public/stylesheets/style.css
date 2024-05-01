@@ -64,8 +64,7 @@ a:active {
   width: calc(100vw - 300px);
 }
 
-.home-categories,
-.category-list {
+.m-l-16 {
   margin-left: 16px;
 }
 
@@ -73,8 +72,4 @@ a:active {
   display: flex;
   flex-direction: column;
   gap: 1vh;
-}
-
-.item-list-item p {
-  margin-left: 16px;
 }
