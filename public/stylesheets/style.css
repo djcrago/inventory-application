@@ -7,27 +7,29 @@
 body {
   display: flex;
   flex-direction: column;
+  min-width: 500px;
 }
 
 .header {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
+  min-width: max-content;
   height: 8vh;
+  padding: 0 8px;
   background-color: rgb(176, 212, 176);
+  border-bottom: 1px solid gray;
 }
 
 .main {
   display: flex;
-  width: 100vw;
-  height: 92vh;
 }
 
 .sidebar-nav {
   font-size: 1.1rem;
-  width: 190px;
-  padding: 3vh 16px;
+  width: 250px;
+  padding: 3vh 32px;
+  border-right: 1px solid gray;
 }
 
 ul {
@@ -54,10 +56,20 @@ a:active {
   display: flex;
   flex-direction: column;
   gap: 3vh;
-  padding: 32px;
-  width: calc(100vw - 195px);
+  padding: 3vh 5vw;
+  width: calc(100vw - 300px);
 }
 
 .home-categories {
-  margin-left: 32px;
+  margin-left: 16px;
+}
+
+.item-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+}
+
+.item-list-item p {
+  margin-left: 16px;
 }

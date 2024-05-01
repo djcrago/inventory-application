@@ -2,3 +2,11 @@ extends layout
 
 block content 
   h2= title
+
+  ul 
+    each item in item_list 
+      li 
+        div.item-list-item
+          a(href=item.url) #{item.name}
+          p Price: $#{item.price}
+          p Number in Stock: #{item.number_in_stock}
