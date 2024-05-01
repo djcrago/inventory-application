@@ -64,7 +64,8 @@ a:active {
   width: calc(100vw - 300px);
 }
 
-.home-categories {
+.home-categories,
+.category-list {
   margin-left: 16px;
 }
 

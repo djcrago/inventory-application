@@ -2,3 +2,9 @@ extends layout
 
 block content 
   h2= title
+
+  ul 
+    each category in category_list 
+      li 
+        div.category-list
+          a(href=category.url) #{category.name}
