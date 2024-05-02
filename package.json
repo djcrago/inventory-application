@@ -6,8 +6,8 @@
   },
   "private": true,
   "scripts": {
-    "start": "node --env-file=.env ./bin/www",
-    "devstart": "nodemon --env-file=.env ./bin/www",
+    "start": "node ./bin/www",
+    "devstart": "nodemon ./bin/www",
     "serverstart": "DEBUG=inventory-application:* npm run devstart"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
     "pug": "2.0.0-beta11"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.7",
     "nodemon": "^3.1.0"
   }
 }
