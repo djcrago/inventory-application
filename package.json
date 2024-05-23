@@ -1,6 +1,9 @@
 {
   "name": "inventory-application",
+  "author": "Dexter Crago",
+  "description": "This repository houses an example inventory management website where employees can create, update, and delete inventory items.",
   "version": "0.0.0",
+  "license": "ISC",
   "engines": {
     "node": ">=20.12.1"
   },
