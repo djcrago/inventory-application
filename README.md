@@ -1,7 +1,7 @@
 # Inventory Application
 
 This repository houses an example inventory management website where employees can create, update, and delete inventory items.
-The live website can be found here: https://djcrago.github.io/inventory-applcation/
+The live website can be found here: https://github.com/djcrago/inventory-application
 
 Screenshot of Live Website:
 ![Screenshot of website this repository houses](./website-screenshot.png?raw=true 'Website Screenshot')
