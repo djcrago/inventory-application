@@ -3,10 +3,6 @@ extends layout
 block content 
   h2= title
 
-  ul 
+  ul.clickable
     for item in all_items
-      li 
-        div.item-list-item
-          a(href=item.url) #{item.name}
-          p.m-l-16 Price: $#{item.price}
-          p.m-l-16 Number in Stock: #{item.number_in_stock}
+      a.m-l-16.link(href=item.url) #{item.name} (#{item.number_in_stock} in stock)

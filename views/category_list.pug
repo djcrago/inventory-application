@@ -3,7 +3,6 @@ extends layout
 block content 
   h2= title
 
-  ul 
+  ul.clickable
     for category in all_categories
-      li 
-        a.m-l-16(href=category.url) #{category.name}
+      a.m-l-16.link(href=category.url) #{category.name}

@@ -5,11 +5,9 @@ block content
 
   p #[strong Number of Items in Category:] #{items_in_category.length}
 
-  ul
+  ul.clickable
     for item  in items_in_category
-      li.m-l-16
-        a(href=item.url) #{item.name} 
-        | (#{item.number_in_stock} in stock)
+      a.m-l-16.link(href=item.url) #{item.name} (#{item.number_in_stock} in stock)
   hr 
   a(href=`${category.url}/update`) Update Category 
   a(href=`${category.url}/delete`) Delete Category  

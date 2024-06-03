@@ -10,6 +10,6 @@ block content
 
   h3 Categories
     
-  ul.categoriesHome
+  ul.clickable.wrapable
     for category in all_categories
       a.m-l-16.link(href=`/inventory/category/${category.name}`) #{category.name}: #{category.item_count} items
