@@ -8,7 +8,7 @@ const helmet = require('helmet');
 const RateLimit = require('express-rate-limit');
 const limiter = RateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 20,
+  max: 50,
 });
 require('dotenv').config();
 
@@ -42,7 +42,7 @@ async function main() {
   await mongoose.connect(mongoDB);
 }
 
-app.use('/pictures', express.static(process.cwd() + '/pictures'));
+app.use('*/pictures', express.static(process.cwd() + '/pictures'));
 
 // Use routers
 app.use('/', indexRouter);

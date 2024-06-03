@@ -29,7 +29,7 @@ exports.index = asyncHandler(async (req, res, next) => {
   });
 
   res.render('index', {
-    title: 'Little Family Inventory Management Home',
+    title: 'Inventory Management',
     all_items: allItems.length,
     all_categories: categoriesWithItemCounts,
   });
