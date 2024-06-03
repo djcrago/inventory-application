@@ -24,6 +24,10 @@ body {
   border-bottom: 1px solid lightgray;
 }
 
+.header img {
+  height: 40px;
+}
+
 .main {
   display: flex;
   flex-grow: 1;
@@ -76,6 +80,24 @@ a:active {
 
 a:hover {
   text-decoration: underline;
+}
+
+.header-link {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+}
+
+.header-link:link {
+  color: black;
+}
+
+.header-link:visited {
+  color: black;
+}
+
+.header-link:hover {
+  text-decoration: none;
 }
 
 form {

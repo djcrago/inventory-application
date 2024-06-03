@@ -42,6 +42,8 @@ async function main() {
   await mongoose.connect(mongoDB);
 }
 
+app.use('/pictures', express.static(process.cwd() + '/pictures'));
+
 // Use routers
 app.use('/', indexRouter);
 app.use('/inventory', inventoryRouter);
