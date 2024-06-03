@@ -7,9 +7,10 @@
 body {
   display: flex;
   flex-direction: column;
-  min-width: 500px;
+  min-width: 100vw;
   min-height: 100vh;
   font-size: 1.1rem;
+  overflow-x: hidden;
 }
 
 .header {
@@ -47,7 +48,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 3vh;
-  padding: 4vw 5vw;
+  padding: 3vw 4vw;
   width: 75vw;
 }
 
@@ -122,6 +123,8 @@ input[type='text'],
 input[type='number'],
 #description {
   padding: 8px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
 }
 
 input[type='text'],
