@@ -13,6 +13,10 @@ body {
   overflow-x: hidden;
 }
 
+button {
+  cursor: pointer;
+}
+
 .header {
   display: flex;
   justify-content: center;
